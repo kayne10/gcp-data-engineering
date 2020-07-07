@@ -23,7 +23,7 @@ from pyspark.sql.session import SparkSession
 
 # In[8]:
 
-
+sc = SparkContext()
 spark = SQLContext(sc)
 
 
@@ -36,12 +36,12 @@ current_date = date.today()
 
 file_name = str(current_date)
 
-bucket_name = "gs://bucket_name"
+bucket_name = "gs://etl-practice"
 
 # In[9]:
 
 
-flights_data = spark.read.json(bucket_name+"/flights-data/"+file_name+".json")
+flights_data = spark.read.json(bucket_name+"/flights-data/2019-05-06.json")
 
 
 # In[11]:
@@ -132,8 +132,8 @@ avg_delays_by_distance_category = spark.sql(qry)
 # In[33]:
 
 
-output_flight_nums = bucket_name+"/flights_data_output/"+file_name+"_flight_nums"
-output_distance_category = bucket_name+"/flights_data_output/"+file_name+"_distance_category"
+output_flight_nums = bucket_name+"/flights-data-output/"+file_name+"_flight_nums"
+output_distance_category = bucket_name+"/flights-data-output/"+file_name+"_distance_category"
 
 avg_delays_by_flight_nums.coalesce(1).write.format("json").save(output_flight_nums)
 avg_delays_by_distance_category.coalesce(1).write.format("json").save(output_distance_category)
