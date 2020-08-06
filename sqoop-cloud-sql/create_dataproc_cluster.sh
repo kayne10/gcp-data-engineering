@@ -1,9 +1,10 @@
-bucket="gs://your_bucket_name"
+bucket="gs://etl-practice"
 cluster_name="ephemeral-spark-cluster-20190518"
-instance_name="your_cloudsql_instance_name"
+instance_name="de-intro:us-central1:mysql-instance"
 
 gcloud dataproc clusters create $cluster_name \
---zone=us-central1-a \
+--region=asia-east1 \
+--zone=asia-east1-a \
 --scopes=default,sql-admin \
 --initialization-actions=gs://dataproc-initialization-actions/cloud-sql-proxy/cloud-sql-proxy.sh \
 --properties=hive:hive.metastore.warehouse.dir=$bucket/hive-warehouse \

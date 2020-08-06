@@ -1,26 +1,17 @@
 from datetime import datetime,timedelta , date 
-
 from airflow import models,DAG 
-
 from airflow.contrib.operators.dataproc_operator import DataprocClusterCreateOperator,DataProcPySparkOperator,DataprocClusterDeleteOperator
-
 from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
-
 from airflow.operators import BashOperator 
-
 from airflow.models import *
-
 from airflow.utils.trigger_rule import TriggerRule
 
 
-current_date = str(date.today())
-
-BUCKET = "gs://bucket_name"
-
-PROJECT_ID = "your_project_id"
-
+#current_date = str(date.today())
+current_date = "2019-05-10"
+BUCKET = "gs://etl-practice"
+PROJECT_ID = "DE-Intro"
 PYSPARK_JOB = BUCKET + "/spark-job/flights-etl.py"
-
 DEFAULT_DAG_ARGS = {
     'owner':"airflow",
     'depends_on_past' : False,
@@ -57,7 +48,7 @@ with DAG("flights_delay_etl",default_args=DEFAULT_DAG_ARGS) as dag :
 
         task_id = "bq_load_avg_delays_by_distance",
         bucket=BUCKET,
-        source_objects=["flights_data_output/"+current_date+"_distance_category/part-*"],
+        source_objects=["flights-data-output/"+current_date+"_distance_category/part-*"],
         destination_project_dataset_table=PROJECT_ID+".data_analysis.avg_delays_by_distance",
         autodetect = True,
         source_format="NEWLINE_DELIMITED_JSON",
@@ -71,7 +62,7 @@ with DAG("flights_delay_etl",default_args=DEFAULT_DAG_ARGS) as dag :
 
         task_id = "bq_load_delays_by_flight_nums",
         bucket=BUCKET,
-        source_objects=["flights_data_output/"+current_date+"_flight_nums/part-*"],
+        source_objects=["flights-data-output/"+current_date+"_flight_nums/part-*"],
         destination_project_dataset_table=PROJECT_ID+".data_analysis.avg_delays_by_flight_nums",
         autodetect = True,
         source_format="NEWLINE_DELIMITED_JSON",
@@ -91,13 +82,10 @@ with DAG("flights_delay_etl",default_args=DEFAULT_DAG_ARGS) as dag :
 
     delete_tranformed_files = BashOperator(
         task_id = "delete_tranformed_files",
-        bash_command = "gsutil -m rm -r " +BUCKET + "/flights_data_output/*"
+        bash_command = "gsutil -m rm -r " +BUCKET + "/flights-data-output/*"
     )
 
     create_cluster.dag = dag
-
     create_cluster.set_downstream(submit_pyspark)
-
     submit_pyspark.set_downstream([bq_load_delays_by_flight_nums,bq_load_delays_by_distance,delete_cluster])
-
     delete_cluster.set_downstream(delete_tranformed_files)

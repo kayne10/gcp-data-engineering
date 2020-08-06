@@ -35,13 +35,13 @@ from datetime import date
 current_date = date.today()
 
 #file_name = str(current_date)
-file_name = "2019-05-05"
+file_name = "2019-05-10"
 
 bucket_name = "gs://etl-practice"
 # In[9]:
 
 
-flights_data = spark.read.json("gs://etl-practice/flights-data/2019-05-05.json")
+flights_data = spark.read.json("gs://etl-practice/flights-data/2019-05-10.json")
 
 
 # In[11]:
@@ -124,8 +124,8 @@ avg_delays_by_distance_category = spark.sql(qry)
 # In[33]:
 
 
-output_flight_nums = bucket_name+"/flights-data-output/2019-05-05_flight_nums"
-output_distance_category = bucket_name+"/flights-data-output/2019-05-05_distance_category"
+output_flight_nums = bucket_name+"/flights-data-output/2019-05-10_flight_nums"
+output_distance_category = bucket_name+"/flights-data-output/2019-05-10_distance_category"
 
 avg_delays_by_flight_nums.coalesce(1).write.format("json").save(output_flight_nums)
 avg_delays_by_distance_category.coalesce(1).write.format("json").save(output_distance_category)

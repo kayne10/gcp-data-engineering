@@ -4,7 +4,7 @@ bucket="gs://bucket_name"
 
 pwd_file=$bucket/sqoop-pwd/pwd.txt
 
-cluster_name="ephemeral-spark-cluster-20190519"
+cluster_name="ephemeral-spark-cluster-20190518"
 
 table_name="flights"
 
@@ -15,7 +15,7 @@ target_dir=$bucket/sqoop_output
 gcloud dataproc jobs submit hadoop \
 --cluster=$cluster_name --region=asia-east1 \
 --class=org.apache.sqoop.Sqoop \
---jars=$bucket/sqoop_jars/sqoop_sqoop-1.4.7.jar,$bucket/sqoop_jars/sqoop_avro-tools-1.8.2.jar,file:///usr/share/java/mysql-connector-java-5.1.42.jar \
+--jars=$bucket/sqoop-jars/sqoop_sqoop-1.4.7.jar,$bucket/sqoop-jars/sqoop_avro-tools-1.8.2.jar,file:///usr/share/java/mysql-connector-java-5.1.42.jar \
 -- import \
 -Dmapreduce.job.user.classpath.first=true \
 --driver com.mysql.jdbc.Driver \
@@ -31,7 +31,7 @@ gcloud dataproc jobs submit hadoop \
 gcloud dataproc jobs submit hadoop \
 --cluster=$cluster_name --region=asia-east1 \
 --class=org.apache.sqoop.Sqoop \
---jars=$bucket/sqoop_jars/sqoop_sqoop-1.4.7.jar,$bucket/sqoop_jars/sqoop_avro-tools-1.8.2.jar,file:///usr/share/java/mysql-connector-java-5.1.42.jar \
+--jars=$bucket/sqoop-jars/sqoop_sqoop-1.4.7.jar,$bucket/sqoop-jars/sqoop_avro-tools-1.8.2.jar,file:///usr/share/java/mysql-connector-java-5.1.42.jar \
 -- import \
 -Dmapreduce.job.classloader=true \
 --driver com.mysql.jdbc.Driver \
@@ -47,7 +47,7 @@ gcloud dataproc jobs submit hadoop \
 gcloud dataproc jobs submit hadoop \
 --cluster=$cluster_name --region=asia-east1 \
 --class=org.apache.sqoop.Sqoop \
---jars=$bucket/sqoop_jars/sqoop_sqoop-1.4.7.jar,$bucket/sqoop_jars/sqoop_avro-tools-1.8.2.jar,file:///usr/share/java/mysql-connector-java-5.1.42.jar \
+--jars=$bucket/sqoop-jars/sqoop_sqoop-1.4.7.jar,$bucket/sqoop-jars/sqoop_avro-tools-1.8.2.jar,file:///usr/share/java/mysql-connector-java-5.1.42.jar \
 -- import \
 -Dmapreduce.job.classloader=true \
 -Dmapreduce.output.basename="part.20190514_" \
@@ -65,7 +65,7 @@ gcloud dataproc jobs submit hadoop \
 gcloud dataproc jobs submit hadoop \
 --cluster=$cluster_name --region=asia-east1 \
 --class=org.apache.sqoop.Sqoop \
---jars=$bucket/sqoop_jars/sqoop_sqoop-1.4.7.jar,$bucket/sqoop_jars/sqoop_avro-tools-1.8.2.jar,file:///usr/share/java/mysql-connector-java-5.1.42.jar \
+--jars=$bucket/sqoop-jars/sqoop_sqoop-1.4.7.jar,$bucket/sqoop-jars/sqoop_avro-tools-1.8.2.jar,file:///usr/share/java/mysql-connector-java-5.1.42.jar \
 -- import \
 -Dmapreduce.job.classloader=true \
 --driver com.mysql.jdbc.Driver \
